@@ -1,19 +1,37 @@
-<!-- mygame/templates/layout.html -->
-<!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}Tic Tac Toe{% endblock %}</title>
-    {% load static %}
+    <title>Tic Tac Toe</title>
     <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
 <body>
-    <div class="container">
-        <h1>Tic Tac Toe Game</h1>
 
-        {% block content %}
-        <!-- Page content will go here -->
-        {% endblock %}
-    </div>
+    <h1>Tic Tac Toe</h1>
+
+    <p>Current Turn: {{ current_player }}</p>
+    <p style="color: green;">{{ message }}</p>
+
+    <form method="post">
+        {% csrf_token %}
+        <table style="margin: auto;">
+            {% for row in board %}
+            <tr>
+                {% for cell in row %}
+                <td>
+                    <button name="move" value="{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}"
+                            style="width: 80px; height: 80px; font-size: 24px;"
+                            {% if cell != "" or winner %}disabled{% endif %}>
+                        {{ cell }}
+                    </button>
+                </td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </table>
+        <br>
+        <button type="submit" name="reset" value="true">Reset</button>
+    </form>
+
 </body>
 </html>
